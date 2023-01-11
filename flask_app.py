@@ -1,4 +1,4 @@
-
+import subprocess
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -10,13 +10,9 @@ def index():
 @app.route("/execute", methods=["POST"])
 def execute():
     code = request.form["code"]
-    #You may want to consider using subprocess.run() with the `python` command instead of eval or exec for security reasons
     try:
-        output = eval(code)
-        if output is not None:
-            return str(output)
-        else:
-            return ""
+        output = subprocess.run(["python", "-c", code], capture_output=True, text=True)
+        return output.stdout or output.stderr
     except Exception as e:
         return str(e)
 
