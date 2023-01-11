@@ -4,6 +4,7 @@
     <title>Python Code Editor</title>
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.56.0/lib/codemirror.min.js"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/codemirror@5.56.0/lib/codemirror.min.css" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.52.2/theme/monokai.min.css">
     <script src="https://cdn.jsdelivr.net/npm/codemirror@5.56.0/mode/python/python.min.js"></script>
   </head>
   <body>
@@ -18,7 +19,9 @@
     <script>
         var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
             lineNumbers: true,
-            mode: "python"
+			tabSize: 4,
+            mode: "python",
+			theme: 'monokai'
         });
     </script>
   </body>
