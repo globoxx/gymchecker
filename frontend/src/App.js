@@ -20,7 +20,7 @@ class App extends React.Component {
     event.preventDefault();
     const value = this.state.value;
     console.log(value)
-    const matches = value.match(/[input]+\([^\)]*\)(\.[^\)]*\))?/)
+    const matches = value.match(/[input]+\([^\)]*\)(\.[^\)]*\))?/g)
     console.log(matches)
     for (const match in matches) {
       const replacement = String(prompt(match))
