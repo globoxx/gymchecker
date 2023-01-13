@@ -11,8 +11,9 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 'print("hello world!")',
+      value: 'name = input("What is your name ?")',
       output: '',
+      input: ''
     };
   }
 
@@ -20,8 +21,8 @@ class App extends React.Component {
     event.preventDefault();
     const value = this.state.value;
     try {
-      const response = await axios.post('/execute', { code: value });
-      this.setState({ output: response.data });
+      const response = await axios.post('/execute', { code: value, input: this.state.input });
+      this.setState({ output: response.data, input: '' });
     } catch (error) {
       if (error.response) {
 
@@ -43,6 +44,10 @@ class App extends React.Component {
     }
   };
 
+  handleInputChange = (event) => {
+    this.setState({ input: event.target.value });
+  }
+
   render() {
     return (
       <div>
@@ -55,6 +60,7 @@ class App extends React.Component {
             extensions={[python()]}
           />
           <br />
+          <input type="text" value={this.state.input} onChange={this.handleInputChange} placeholder="input" />
           <input type="submit" value="Execute" />
         </form>
         <div>{this.state.output}</div>
