@@ -19,7 +19,11 @@ def execute():
         output = ""
         for input_data in inputs:
             output += process.stdin.write(input_data.encode() + b'\n')
-            output += process.stdout.readline().decode()
+            line = process.stdout.readline().decode()
+            if line.startswith("input>"):
+                output += "input>"
+                return output
+            output += line
         process.stdin.close()
         output += process.stdout.read().decode()
         return output

@@ -22,7 +22,13 @@ class App extends React.Component {
     const value = this.state.value;
     try {
       const response = await axios.post('/execute', { code: value, inputs: this.state.inputs });
-      this.setState({ output: response.data, inputs: [] });
+      if (response.data.startsWith("input>")) {
+        const input = prompt(response.data);
+        this.setState({ inputs: [...this.state.inputs, input] });
+        this.handleSubmit(event);
+      } else {
+        this.setState({ output: response.data, inputs: [] });
+      }
     } catch (error) {
       if (error.response) {
 
