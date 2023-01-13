@@ -13,7 +13,7 @@ class App extends React.Component {
     this.state = {
       value: 'name = input("What is your name ?")',
       output: '',
-      input: ''
+      inputs: []
     };
   }
 
@@ -21,8 +21,8 @@ class App extends React.Component {
     event.preventDefault();
     const value = this.state.value;
     try {
-      const response = await axios.post('/execute', { code: value, input: this.state.input });
-      this.setState({ output: response.data, input: '' });
+      const response = await axios.post('/execute', { code: value, inputs: this.state.inputs });
+      this.setState({ output: response.data, inputs: [] });
     } catch (error) {
       if (error.response) {
 
@@ -44,8 +44,10 @@ class App extends React.Component {
     }
   };
 
-  handleInputChange = (event) => {
-    this.setState({ input: event.target.value });
+  handleInputChange = (event, index) => {
+    let inputs = [...this.state.inputs];
+    inputs[index] = event.target.value;
+    this.setState({ inputs });
   }
 
   render() {
@@ -60,7 +62,9 @@ class App extends React.Component {
             extensions={[python()]}
           />
           <br />
-          <input type="text" value={this.state.input} onChange={this.handleInputChange} placeholder="input" />
+          {this.state.inputs.map((input, index) => (
+            <input key={index} type="text" value={input} onChange={(e) => this.handleInputChange(e, index)} placeholder="input" />
+          ))}
           <input type="submit" value="Execute" />
         </form>
         <div>{this.state.output}</div>
