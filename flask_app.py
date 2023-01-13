@@ -1,5 +1,5 @@
 import subprocess
-from flask import Flask, render_template, request
+from flask import Flask, request
 
 app = Flask(__name__, static_folder="./frontend/build", static_url_path="/")
 
