@@ -9,7 +9,7 @@ def index():
 
 @app.route("/execute", methods=["POST"])
 def execute():
-    code = request.form["code"]
+    code = request.get_json().get("code")
     try:
         output = subprocess.run(["python", "-c", code], capture_output=True, text=True)
         return output.stdout or output.stderr
