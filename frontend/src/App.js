@@ -19,8 +19,28 @@ class App extends React.Component {
   handleSubmit = async event => {
     event.preventDefault();
     const value = this.state.value;
-    const response = await axios.post('/execute', { code: value });
-    this.setState({ output: response.data });
+    try {
+      const response = await axios.post('/execute', { code: value });
+      this.setState({ output: response.data });
+    } catch (error) {
+      if (error.response) {
+
+        // The client was given an error response (5xx, 4xx)
+        console.log(error.response.data);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+        
+      } else if (error.request) {
+        
+        // The client never received a response, and the request was never left
+        console.log(error.request);
+
+      } else {
+        
+        // Anything else
+        console.log('Error', error.message);
+      }
+    }
   };
 
   render() {
