@@ -20,7 +20,7 @@ class App extends React.Component {
     event.preventDefault();
     let value = this.state.value;
     console.log(value)
-    const matches = value.match(/[input]+\([^\)]*\)(\.[^\)]*\))?/g)
+    const matches = value.match(/input+\([^\)]*\)(\.[^\)]*\))?/g)
     console.log(matches)
     if (!(matches === null)){
       for (const match of matches) {
