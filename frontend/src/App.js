@@ -12,8 +12,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       value: 'name = input("What is your name ?")',
-      output: '',
-      inputs: []
+      output: ''
     };
   }
 
@@ -22,39 +21,22 @@ class App extends React.Component {
     const value = this.state.value;
     try {
       const response = await axios.post('/execute', { code: value, inputs: this.state.inputs });
-      if (response.data.startsWith("input>")) {
-        const input = prompt(response.data);
-        this.setState({ inputs: [...this.state.inputs, input] });
-        this.handleSubmit(event);
-      } else {
-        this.setState({ output: response.data, inputs: [] });
-      }
+      this.setState({ output: response.data });
     } catch (error) {
       if (error.response) {
-
         // The client was given an error response (5xx, 4xx)
         console.log(error.response.data);
         console.log(error.response.status);
         console.log(error.response.headers);
-        
       } else if (error.request) {
-        
         // The client never received a response, and the request was never left
         console.log(error.request);
-
       } else {
-        
         // Anything else
         console.log('Error', error.message);
       }
     }
   };
-
-  handleInputChange = (event, index) => {
-    let inputs = [...this.state.inputs];
-    inputs[index] = event.target.value;
-    this.setState({ inputs });
-  }
 
   render() {
     return (
@@ -68,9 +50,6 @@ class App extends React.Component {
             extensions={[python()]}
           />
           <br />
-          {this.state.inputs.map((input, index) => (
-            <input key={index} type="text" value={input} onChange={(e) => this.handleInputChange(e, index)} placeholder="input" />
-          ))}
           <input type="submit" value="Execute" />
         </form>
         <div>{this.state.output}</div>

@@ -10,23 +10,13 @@ def index():
 @app.route("/execute", methods=["POST"])
 def execute():
     code = request.get_json().get("code")
-    inputs = request.get_json().get("inputs", [])
     try:
         process = subprocess.Popen(["python", "-u", "-c", code],
                                    stdin=subprocess.PIPE,
                                    stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
-        output = ""
-        for input_data in inputs:
-            output += process.stdin.write(input_data.encode() + b'\n')
-            line = process.stdout.readline().decode()
-            if line.startswith("input>"):
-                output += "input>"
-                return output
-            output += line
-        process.stdin.close()
-        output += process.stdout.read().decode()
-        return output
+        output, error = process.communicate(timeout=30)
+        return output or error
     except Exception as e:
         return str(e)
 
