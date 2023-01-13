@@ -18,16 +18,16 @@ class App extends React.Component {
 
   handleSubmit = async event => {
     event.preventDefault();
-    const value = this.state.value;
+    let value = this.state.value;
     console.log(value)
     const matches = value.match(/[input]+\([^\)]*\)(\.[^\)]*\))?/g)
     console.log(matches)
     for (const match in matches) {
-      const replacement = String(prompt(match))
-      value.replace(match, replacement)
+      const replacement = "\"" + String(prompt(match)) + "\""
+      value = value.replace(match, replacement)
     }
     try {
-      const response = await axios.post('/execute', { code: value, inputs: this.state.inputs });
+      const response = await axios.post('/execute', { code: value });
       this.setState({ output: response.data });
     } catch (error) {
       if (error.response) {
