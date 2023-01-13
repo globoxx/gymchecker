@@ -1,5 +1,8 @@
 import './App.css';
 
+import React from 'react';
+import axios from 'axios';
+
 import CodeMirror from '@uiw/react-codemirror';
 import { python } from '@codemirror/lang-python';
 import { okaidia } from '@uiw/codemirror-theme-okaidia';
