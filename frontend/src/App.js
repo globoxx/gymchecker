@@ -19,7 +19,9 @@ class App extends React.Component {
   handleSubmit = async event => {
     event.preventDefault();
     const value = this.state.value;
+    console.log(value)
     const matches = value.match(/[input]+\([^\)]*\)(\.[^\)]*\))?/)
+    console.log(matches)
     for (const match in matches) {
       const replacement = String(prompt(match))
       value.replace(match, replacement)
