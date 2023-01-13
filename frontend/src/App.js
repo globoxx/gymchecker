@@ -11,7 +11,7 @@ function App() {
       value="console.log('hello world!');"
       height="200px"
       theme={okaidia}
-      extensions={[python]}
+      extensions={[python()]}
     />
   );
 }
