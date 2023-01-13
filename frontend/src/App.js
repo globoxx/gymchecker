@@ -1,72 +1,40 @@
 import './App.css';
 
-import React from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
+import Sk from 'skulpt'
 
-import CodeMirror from '@uiw/react-codemirror';
-import { python } from '@codemirror/lang-python';
-import { okaidia } from '@uiw/codemirror-theme-okaidia';
-
-class App extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 'name = input("What is your name ?")',
-      output: ''
-    };
-  }
-
-  handleSubmit = async event => {
-    event.preventDefault();
-    let value = this.state.value;
-    console.log(value)
-    const matches = value.match(/input+\([^\)]*\)(\.[^\)]*\))?/g)
-    console.log(matches)
-    if (!(matches === null)){
-      for (const match of matches) {
-        console.log(match)
-        const replacement = "\"" + String(prompt(match)) + "\""
-        value = value.replace(match, replacement)
-      }
-      console.log(value)
-    }
-    try {
-      const response = await axios.post('/execute', { code: value });
-      this.setState({ output: response.data });
-    } catch (error) {
-      if (error.response) {
-        // The client was given an error response (5xx, 4xx)
-        console.log(error.response.data);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      } else if (error.request) {
-        // The client never received a response, and the request was never left
-        console.log(error.request);
-      } else {
-        // Anything else
-        console.log('Error', error.message);
-      }
-    }
-  };
-
-  render() {
-    return (
-      <div>
-        <form onSubmit={this.handleSubmit}>
-          <CodeMirror
-            value={this.state.value}
-            onChange={value => this.setState({ value })}
-            height="200px"
-            theme={okaidia}
-            extensions={[python()]}
-          />
-          <br />
-          <input type="submit" value="Execute" />
-        </form>
-        <div>{this.state.output}</div>
-      </div>
-    );
-  }
+function builtinRead(x) {
+  if (Sk.builtinFiles === undefined || Sk.builtinFiles["files"][x] === undefined)
+          throw "File not found: '" + x + "'";
+  return Sk.builtinFiles["files"][x];
 }
 
-export default App;
+function PythonEditor() {
+  const [code, setCode] = useState('');
+  const [output, setOutput] = useState('');
+
+  const handleSubmit = () => {
+    Sk.configure({output: setOutput, read:builtinRead});
+    (Sk.TurtleGraphics || (Sk.TurtleGraphics = {})).target = 'mycanvas';
+    var myPromise = Sk.misceval.asyncToPromise(function() {
+      return Sk.importMainWithBody("<stdin>", false, code, true);
+    });
+    myPromise.then(function(mod) {
+        console.log('success');
+    },
+        function(err) {
+        console.log(err.toString());
+    });
+  }
+
+  return (
+    <div>
+      <textarea value={code} onChange={e => setCode(e.target.value)} />
+      <button onClick={handleSubmit}>Run</button>
+      <pre>{output}</pre>
+      <div id="mycanvas"></div> 
+    </div>
+  );
+}
+
+export default PythonEditor;
