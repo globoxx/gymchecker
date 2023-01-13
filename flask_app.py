@@ -11,12 +11,8 @@ def index():
 def execute():
     code = request.get_json().get("code")
     try:
-        process = subprocess.Popen(["python", "-u", "-c", code],
-                                   stdin=subprocess.PIPE,
-                                   stdout=subprocess.PIPE,
-                                   stderr=subprocess.PIPE)
-        output, error = process.communicate(timeout=30)
-        return output or error
+        output = subprocess.run(["python", "-c", code], capture_output=True, text=True)
+        return output.stdout or output.stderr
     except Exception as e:
         return str(e)
 

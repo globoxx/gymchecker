@@ -23,9 +23,11 @@ class App extends React.Component {
     const matches = value.match(/[input]+\([^\)]*\)(\.[^\)]*\))?/g)
     console.log(matches)
     for (const match in matches) {
+      console.log(match)
       const replacement = "\"" + String(prompt(match)) + "\""
       value = value.replace(match, replacement)
     }
+    console.log(value)
     try {
       const response = await axios.post('/execute', { code: value });
       this.setState({ output: response.data });
