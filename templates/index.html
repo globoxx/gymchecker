@@ -27,6 +27,10 @@ function builtinRead(x) {
 // configure the output function
 // call Sk.importMainWithBody()
 function runit() { 
+    var editor = CodeMirror.fromTextArea(document.getElementById("yourcode"), {
+        lineNumbers: true,
+        mode: "python"
+    });
    var prog = document.getElementById("yourcode").value; 
    var mypre = document.getElementById("output"); 
    mypre.innerHTML = ''; 
