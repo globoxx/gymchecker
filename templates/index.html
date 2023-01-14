@@ -24,17 +24,18 @@ function builtinRead(x) {
     return Sk.builtinFiles["files"][x];
 }
 
+var editor = CodeMirror.fromTextArea(document.getElementById("yourcode"), {
+    lineNumbers: true,
+    mode: "python"
+});
+
 // Here's everything you need to run a python program in skulpt
 // grab the code from your textarea
 // get a reference to your pre element for output
 // configure the output function
 // call Sk.importMainWithBody()
 function runit() { 
-    var editor = CodeMirror.fromTextArea(document.getElementById("yourcode"), {
-        lineNumbers: true,
-        mode: "python"
-    });
-   var prog = document.getElementById("yourcode").value; 
+   var prog = editor.getValue(); 
    var mypre = document.getElementById("output"); 
    mypre.innerHTML = ''; 
    Sk.pre = "output";
